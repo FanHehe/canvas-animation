@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset = "utf-8" >
+    <meta http-equiv="content-type" content="text/html; charset=utf-8">
+    <title>五色光盘</title>
+    <link rel="icon" href="http://og04901z9.bkt.clouddn.com/favicon.ico">
+    <style>
+        html, body{ height: 100%; } body { margin: 0; box-sizing: border-box; }
+        .footer { width: 100%; position: fixed; bottom: 0px; box-sizing: border-box; padding: 20px 0; text-align: center; font-size: 12px;}
+        .footer a { text-decoration: none; }
+    </style>
+    <script src = "../libs/Canvas.js"></script>
+</head>
+<body>
+    <script>
+        function init () {
+            var canvas = window.c = new Canvas(window.innerWidth, window.innerHeight);
+            draw(canvas.ctx);
+            document.body.appendChild(canvas.cvs);
+        };
+        window.addEventListener('load', init, false);
+        function draw(ctx) {
+            var cvs = ctx.canvas;
+            var pieces = 360;
+            var perAngel = 2 * Math.PI / pieces;
+            var r = Math.min(cvs.width, cvs.height) / 2;
+
+            ctx.clearRect(0, 0, cvs.width, cvs.height);
+            ctx.save();
+            ctx.translate(cvs.width / 2, cvs.height / 2);
+            for (var i = 0, startAngel = 0, endAngel = startAngel + perAngel; i < pieces; i++) {
+                var color = getColor (i * perAngel);
+                ctx.beginPath();
+                ctx.moveTo(0, 0);
+                ctx.arc(0, 0, r, startAngel, endAngel, false);
+                ctx.closePath();
+                ctx.strokeStyle = 'rgb('+color+')';
+                ctx.stroke();
+                ctx.fillStyle = 'rgb('+color+')';
+                ctx.fill();
+                ctx.rotate(perAngel);
+            }
+            ctx.restore();
+            function getColor (angle) {
+                var color, d;
+                if (angle < Math.PI * 2 / 5) { // angle: 0-72
+                    d = 255 / (Math.PI * 2 / 5) * angle;
+                    color = '255,' + Math.round(d) + ',0'; // color: 255,0,0 - 255,255,0
+                } else if (angle < Math.PI * 4 / 5) { // angle: 72-144
+                    d = 255 / (Math.PI * 2 / 5) * (angle - Math.PI * 2 / 5);
+                    color = (255 - Math.round(d)) + ',255,0'; // color: 255,255,0 - 0,255,0
+                } else if (angle < Math.PI * 6 / 5) { // angle: 144-216
+                    d = 255 / (Math.PI * 2 / 5) * (angle - Math.PI * 4 / 5);
+                    color = '0,255,' + Math.round(d); // color: 0,255,0 - 0,255,255
+                } else if (angle < Math.PI * 8 / 5) { // angle: 216-288
+                    d = 255 / (Math.PI * 2 / 5) * (angle - Math.PI * 6 / 5);
+                    color = '0,'+(255 - Math.round(d)) + ',255'; // color: 0,255,255 - 0,0,255
+                } else { // angle: 288-360
+                    d = 255 / (Math.PI * 2 / 5) * (angle - Math.PI * 8 / 5);
+                    color = Math.round(d) + ',0,' + (255 - Math.round(d)) ; // color: 0,0,255 - 255,0,0
+                }
+                return color;
+            }
+        }
+    </script>
+    <footer class = "footer">
+        实例参考自：<a href = "http://www.108js.com/example.html" target = "_blank">http://www.108js.com/example.html</a>
+    </footer>
+</body>
+</html>

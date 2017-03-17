@@ -10,14 +10,16 @@
             .footer { width: 100%; position: fixed; bottom: 0px; box-sizing: border-box; padding: 20px 0; text-align: center; font-size: 12px;}
             .footer a { text-decoration: none; }
         </style>
-        <script src = "./libs/Canvas.js"></script>
+        <script src = "../libs/Canvas.js"></script>
     </head>
     <body>
         <script>
             function init () {
                 var cvs = window.c = new Canvas(window.innerWidth, window.innerHeight);
-                document.body.appendChild(cvs.canvas);
+                draw(cvs.ctx);
+                document.body.appendChild(cvs.cvs);
             };
+            function draw (ctx) {};
             window.addEventListener('load', init, false);
         </script>
         <footer class = "footer">
