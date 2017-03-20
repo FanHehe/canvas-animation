@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset = "utf-8" >
+        <meta http-equiv="content-type" content="text/html; charset=utf-8">
+        <title>canvas-animation</title>
+        <link rel="icon" href="http://og04901z9.bkt.clouddn.com/favicon.ico">
+        <style>
+            html, body{ height: 100%; } body { margin: 0; box-sizing: border-box; }
+            .footer { width: 100%; position: fixed; bottom: 0px; box-sizing: border-box; padding: 20px 0; text-align: center; font-size: 12px;}
+            .footer a { text-decoration: none; }
+        </style>
+        <script src = "../libs/Canvas.js"></script>
+    </head>
+    <body>
+        <script>
+            function randomInt(min, max) {
+                return Math.floor(Math.random() * (max - min) + min);
+            };
+            function randomColor () {
+                return 'rgb(' + randomInt(0, 255) + ', ' + randomInt(0, 255) + ', ' + randomInt(0, 255) + ')';
+            };
+            function Point (width, height) {
+                this.r = Math.random() * 8 + 2;
+                this.color = '#e0e0e0';
+
+                this.width = width;
+                this.height = height;
+
+                this.x = randomInt(this.r, width - this.r);
+                this.y = randomInt(this.r, height - this.r);
+                
+                this.vX = randomInt(1, 3) * (randomInt(0, 2) === 1? 1 : -1);
+                this.vY = randomInt(1, 3) * (randomInt(0, 2) === 1? 1 : -1);
+            };
+            Point.prototype.move = function () {
+                this.x += this.vX * 0.2;
+                this.y += this.vY * 0.2;
+
+                if (this.x <= this.r) {
+                    this.x = this.r;
+                    this.vX *= -1;
+                }
+                if (this.x >= this.width - this.r) {
+                    this.x = this.width - this.r;
+                    this.vX *= -1;
+                }
+                if (this.y <= this.r) {
+                    this.y = this.r;
+                    this.vY *= -1;
+                }
+                if (this.y >= this.width - this.r) {
+                    this.y = this.width - this.r;
+                    this.vY *= -1;
+                }
+            };
+            Point.prototype.draw = function (ctx) {
+                ctx.save();
+                ctx.beginPath();
+                ctx.fillStyle = this.color;
+                ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2, false);
+                ctx.closePath();
+                ctx.fill();
+                ctx.restore();
+            };
+            function distance(x1, y1, x2, y2) {
+                return Math.sqrt( (x1 - x2) * (x1 - x2) + (y1 - y2) * ( y1 - y2));
+            };
+            function init () {
+                var cvs = window.c = new Canvas();
+                cvs.insertInto(document.body);
+                draw(cvs.context);
+                cvs.canvas.addEventListener('mousemove', function (e) { window.mX = e.clientX; window.mY = e.clientY; });
+            };
+            function animation (ctx, pointes) {
+                var _self = this || window;
+
+                var mX = _self.mX;
+                var mY = _self.mY;
+
+                var width = ctx.canvas.width;
+                var height = ctx.canvas.height;
+                ctx.clearRect(0, 0, width, height);
+                for (var i = 0, pLen = pointes.length; i < pLen; i ++) {
+                    pointes[i].move();
+                    pointes[i].draw(ctx);
+                    var len = distance(pointes[i].x, pointes[i].y, _self.mX, _self.mY);
+                    if ( len < 150) {
+                        ctx.beginPath();
+                        ctx.strokeStyle = '#e0e0e0';
+                        ctx.moveTo(_self.mX, _self.mY);
+                        ctx.lineTo(pointes[i].x, pointes[i].y);
+                        ctx.closePath();
+                        ctx.stroke();
+                    } 
+                }
+                for ( var i = 0, len = pointes.length; i < len; i++) {
+                    for (var j = i + 1, pLen = pointes.length; j < pLen; j++) {
+                        var len = distance(pointes[i].x, pointes[i].y, pointes[j].x, pointes[j].y);
+                        if ( len < 150) {
+                            ctx.beginPath();
+                            ctx.lineWidth = len / 100 + 1;
+                            ctx.strokeStyle = pointes[i].color;
+                            ctx.moveTo(pointes[j].x, pointes[j].y);
+                            ctx.lineTo(pointes[i].x, pointes[i].y);
+                            ctx.closePath();
+                            ctx.stroke();
+                        }
+                    }
+                }
+            }
+            function draw (ctx) {
+                var pointes = [];
+                var width = ctx.canvas.width;
+                var height = ctx.canvas.height;
+                for (var i = 0; i < 0.0001 * width * height; i++) pointes.push(new Point(width, height));
+                // window.requestAnimationFrame(animation.bind(null, ctx, pointes));
+                window.setInterval(animation.bind(window, ctx, pointes), 30);
+            };
+            window.addEventListener('load', init, false);
+        </script>
+        <footer class = "footer">
+            本实例参考自：<a href = "http://www.qdfuns.com/notes/33868/7393fd13b05cac36799c179cdd81129b.html" target = "_blank">http://www.qdfuns.com/notes/33868/7393fd13b05cac36799c179cdd81129b.html</a>
+        </footer>
+    </body>
+</html>

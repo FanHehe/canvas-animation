@@ -1,5 +1,7 @@
 # canvas-animation
-This is a project with pure html es5.
+
+This is a animation with pure html es5.
+Also it includes some awesome examples cover from web mentioned at references with pure html.
 
 references: 
 

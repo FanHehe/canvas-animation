@@ -15,9 +15,9 @@
 <body>
 	<script>
 		function init () {
-			var cvs = window.c = new Canvas(window.innerWidth, window.innerHeight);
-			draw(cvs.ctx);
-			document.body.appendChild(cvs.cvs);
+			var cvs = window.c = new Canvas();
+			draw(cvs.context);
+			cvs.insertInto(document.body);
 		};
 		function draw (ctx) {
 			var a = 1, b = 5, m = 29, n = 11;
@@ -30,9 +30,9 @@
 				r = r * c; 
 				var x = r * Math.cos( e * k );
 				var y = r * Math.sin( e * k );
-				e += 0.01;
+				e += 1;
 				ctx.lineTo(x,y);  
-			} while ( e <= 4000 );
+			} while ( e <= 100 );
 			ctx.strokeStyle = "#00ff00";
 			ctx.stroke();
 		};

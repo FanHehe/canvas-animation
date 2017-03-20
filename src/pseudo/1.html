@@ -37,6 +37,7 @@
 					var o = {};
 					o.p = document.createElement('span');
 					scr.appendChild(o.p);
+
 					var r = i/parts, j, a, b;
 					j = i % (parts * .5);
 					a = Math.floor(j)/200+(Math.floor(j/2)%10)/5* Math.PI * 2;
@@ -46,6 +47,7 @@
 					o.x = Math.sin(a) * sbr;
 					o.y = Math.cos(a) * sbr;
 					o.z = Math.cos(b) * r;
+
 					obj.push(o);
 					o.transform = function () {
 						var ax = .02 * txe,
