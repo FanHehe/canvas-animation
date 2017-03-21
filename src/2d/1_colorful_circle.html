@@ -16,8 +16,8 @@
     <script>
         function init () {
             var cvs = window.c = new Canvas();
-            draw(cvs.context);
             cvs.insertInto(document.body);
+            draw(cvs.context);
         };
         window.addEventListener('load', init, false);
         function draw(ctx) {
