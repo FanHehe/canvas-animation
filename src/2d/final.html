@@ -7,7 +7,7 @@
         <link rel="icon" href="http://og04901z9.bkt.clouddn.com/favicon.ico">
         <style>
             html, body{ height: 100%; } body { margin: 0; box-sizing: border-box; }
-            .footer { width: 100%; position: fixed; bottom: 0px; box-sizing: border-box; padding: 20px 0; text-align: center; font-size: 12px;}
+            .footer { width: 100%; position: fixed; bottom: 0px; box-sizing: border-box; padding: 20px 0; text-align: center; font-size: 12px; display: none; }
             .footer a { text-decoration: none; }
         </style>
         <script src = "../libs/Canvas.js"></script>
@@ -49,8 +49,8 @@
                     this.y = this.r;
                     this.vY *= -1;
                 }
-                if (this.y >= this.width - this.r) {
-                    this.y = this.width - this.r;
+                if (this.y >= this.height - this.r) {
+                    this.y = this.height - this.r;
                     this.vY *= -1;
                 }
             };
@@ -87,7 +87,8 @@
                     var len = distance(pointes[i].x, pointes[i].y, _self.mX, _self.mY);
                     if ( len < 150) {
                         ctx.beginPath();
-                        ctx.strokeStyle = '#e0e0e0';
+                        ctx.lineWidth = 1 - len / 150;
+                        ctx.strokeStyle = pointes[i].color;
                         ctx.moveTo(_self.mX, _self.mY);
                         ctx.lineTo(pointes[i].x, pointes[i].y);
                         ctx.closePath();
@@ -99,7 +100,7 @@
                         var len = distance(pointes[i].x, pointes[i].y, pointes[j].x, pointes[j].y);
                         if ( len < 150) {
                             ctx.beginPath();
-                            ctx.lineWidth = len / 100 + 1;
+                            ctx.lineWidth = 1 - len / 150;
                             ctx.strokeStyle = pointes[i].color;
                             ctx.moveTo(pointes[j].x, pointes[j].y);
                             ctx.lineTo(pointes[i].x, pointes[i].y);
@@ -114,7 +115,7 @@
                 var width = ctx.canvas.width;
                 var height = ctx.canvas.height;
                 for (var i = 0; i < 0.0001 * width * height; i++) pointes.push(new Point(width, height));
-                // window.requestAnimationFrame(animation.bind(null, ctx, pointes));
+                // window.requestAnimationFrame(animation.bind(window, ctx, pointes));
                 window.setInterval(animation.bind(window, ctx, pointes), 30);
             };
             window.addEventListener('load', init, false);
